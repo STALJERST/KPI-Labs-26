@@ -1,0 +1,49 @@
+ER модель данних меседжера
+
+User:
+user_id
+name_id
+username
+email
+created_at
+
+Conversation:
+conversation_id
+title
+type
+
+ConversationParticipant:
+conversation_id
+user_id
+role
+join_at
+
+Message:
+massage_id
+conversation_id
+sender_id
+content
+sent_at
+
+Attachment:
+attachment_id
+message_id
+file_name
+mine_type
+size_byte
+storage_key
+
+зв'язки між сутностями
+
+* One `User` can participate in many `Conversations` through `ConversationParticipant`.
+* One `Conversation` has one or more `Users`.
+* One `User` can send many `Messages`.
+* One `Conversation` can contain many `Messages`.
+* One `Message` can have zero or many `Attachments`.
+* Every `Attachment` belongs to exactly one `Message`.
+
+Критерії
+
+1. усі індетифікатори мають узгоджений тип UUID
+2. участь користувача мусить мати складений первинний ключ який не дозволить дублювати участь того самого учасника(conversation_id, user_id)
+3. зв'язок User–Conversation реалізований концептуально як багато-до-багатьох через асоціативну сутність
