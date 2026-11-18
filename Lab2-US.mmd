@@ -1,22 +1,26 @@
 usecase-beta
-    direction LR
+direction LR
 
-    actor Guest("Незареєстрований користувач")
-    actor User("Зареєстрований користувач")
-    actor Admin("Адміністратор розмови")
+actor Guest("Незареєстрований користувач")
+actor User("Зареєстрований користувач")
+actor Admin("Адміністратор розмови")
 
-    Admin --|> User
+Admin --|> User
 
-    systemBoundary Messenger["Месенджер"]
-        UC1("Створити акаунт")
-        UC2("Створити розмову")
-        UC3("Надіслати повідомлення")
-        UC4("Переглянути історію повідомлень та вкладень")
-        UC5("Керувати користувачами групи")
-    end
+systemBoundary Messenger["Месенджер"]
+UC1("Створити акаунт")
+UC2("Створити розмову")
+UC3("Надіслати повідомлення")
+UC4("Переглянути історію повідомлень та вкладень")
+UC5("Керувати користувачами групи")
+UC6("Додати вкладення")
+end
 
-    Guest --> UC1
-    User --> UC2
-    User --> UC3
-    User --> UC4
-    Admin --> UC5
+Guest --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC6
+Admin --> UC5
+
+UC6 ..> : extend UC3
