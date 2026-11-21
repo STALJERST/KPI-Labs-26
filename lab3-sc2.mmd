@@ -1,0 +1,39 @@
+sequenceDiagram
+    actor User
+    participant UI as MessengerUI
+    participant Service as MessageService
+    participant CPRepo as ConversationParticipantRepository
+    participant MsgRepo as MessageRepository
+
+    User->>UI: sendMessage(conversationId, "")
+    activate UI
+
+    UI->>Service: submitMessage(userId, conversationId, "")
+    activate Service
+
+    Service->>Service: validateContent(content)
+
+    alt Content is empty
+        Service-->>UI: ValidationError
+    else Content is not empty
+        Service->>CPRepo: isParticipant(userId, conversationId)
+        activate CPRepo
+        CPRepo-->>Service: participationStatus
+        deactivate CPRepo
+
+        alt User is a participant
+            Service->>MsgRepo: saveMessage(userId, conversationId, content)
+            activate MsgRepo
+            MsgRepo-->>Service: savedMessage(messageId, sentAt)
+            deactivate MsgRepo
+
+            Service-->>UI: MessageSent(messageId, sentAt)
+        else User is not a participant
+            Service-->>UI: AccessDenied
+        end
+    end
+
+    deactivate Service
+
+    UI-->>User: showValidationResult()
+    deactivate UI
